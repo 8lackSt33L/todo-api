@@ -1,0 +1,211 @@
+openapi: 3.0.1
+info:
+  title: Todo-Listen-Verwaltung
+  version: 0.1.0
+  description: REST API zur Verwaltung von Todo-Listen und Einträgen
+
+servers:
+- url: http://127.0.0.1:5000/
+
+tags:
+- name: Listenverwaltung
+  description: Verwaltung von Todo-Listen und Einträgen
+
+paths:
+
+  /todo-list:
+    post:
+      tags:
+      - Listenverwaltung
+      summary: Create a new todo list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoList'
+      responses:
+        '201':
+          description: List created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoList'
+        '406':
+          description: Invalid input data
+        '500':
+          description: Internal server error
+
+
+  /todo-list/{list_id}:
+    get:
+      tags:
+      - Listenverwaltung
+      summary: Get all entries of a todo list
+      parameters:
+      - name: list_id
+        in: path
+        required: true
+        description: ID of the todo list
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List entries returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TodoEntry'
+        '404':
+          description: List not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+      - Listenverwaltung
+      summary: Delete a todo list
+      parameters:
+      - name: list_id
+        in: path
+        required: true
+        description: ID of the todo list
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: List deleted successfully
+        '404':
+          description: List not found
+        '500':
+          description: Internal server error
+
+    post:
+      tags:
+      - Listenverwaltung
+      summary: Add a new entry to a todo list
+      parameters:
+      - name: list_id
+        in: path
+        required: true
+        description: ID of the todo list
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoEntry'
+      responses:
+        '201':
+          description: Entry created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoEntry'
+        '404':
+          description: List not found
+        '500':
+          description: Internal server error
+
+
+  /entry/{entry_id}:
+    patch:
+      tags:
+      - Listenverwaltung
+      summary: Update a todo entry
+      parameters:
+      - name: entry_id
+        in: path
+        required: true
+        description: ID of the entry
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoEntry'
+      responses:
+        '200':
+          description: Entry updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoEntry'
+        '404':
+          description: Entry not found
+        '406':
+          description: Invalid input data
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+      - Listenverwaltung
+      summary: Delete a todo entry
+      parameters:
+      - name: entry_id
+        in: path
+        required: true
+        description: ID of the entry
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Entry deleted successfully
+        '404':
+          description: Entry not found
+        '500':
+          description: Internal server error
+
+
+components:
+  schemas:
+
+    TodoList:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          example: "Shopping List"
+
+    TodoEntry:
+      type: object
+      required:
+      - name
+      - list_id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "223e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          example: "Buy milk"
+        description:
+          type: string
+          example: "2 liters of milk"
+        user_id:
+          type: string
+          format: uuid
+          example: "323e4567-e89b-12d3-a456-426614174000"
+        list_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
