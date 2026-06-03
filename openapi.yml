@@ -201,10 +201,6 @@ components:
         description:
           type: string
           example: "2 liters of milk"
-        user_id:
-          type: string
-          format: uuid
-          example: "323e4567-e89b-12d3-a456-426614174000"
         list_id:
           type: string
           format: uuid
