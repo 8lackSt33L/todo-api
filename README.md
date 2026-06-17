@@ -158,7 +158,7 @@ git clone https://github.com/8lackSt33L/todo-api.git
 Projektverzeichnis öffnen:
 
 ```bash
-cd API
+cd todo-api
 ```
 
 ---
